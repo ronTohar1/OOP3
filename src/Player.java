@@ -3,8 +3,10 @@ public abstract class Player extends Unit {
     private static final char charValue='@';
     private int experience;
     protected int level;
+    private
+    private ISurroundings surroundings;
 
-    public Player() {
+    public Player(int experience) {
         super('@');
     }
 
@@ -13,8 +15,6 @@ public abstract class Player extends Unit {
         return null;
     }
     protected abstract void LevelUp();
-
-
 
     protected void UponLevelUp(){
         int minForLevelUp=50*level;
@@ -32,7 +32,6 @@ public abstract class Player extends Unit {
         FillCurrentHealth();
 
         LevelUp();
-        abilityLevelUp();
     }
 
     protected void Die(){
@@ -66,7 +65,8 @@ public abstract class Player extends Unit {
 
     @Override
     public boolean swap(Enemy enemy) {
-        Fight(enemy);
+        if(Fight(enemy));
+            this.experience+=
         return false;
     }
 

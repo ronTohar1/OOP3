@@ -1,32 +1,55 @@
-import javafx.geometry.Pos;
+import java.util.List;
 
-public class GameController {
+public class GameController implements IMover{
 
     private GameBoard board;
     private Player player;
+    List<Enemy> enemies;
+
+    public GameController(){
+        IEnemyMove enemyMove=((enemy)-> enemy.EnemyMove(player));
+        ISurroundings surroundings=((pos, range) -> {return null;});
+        IKiller killer=((unit -> {board.Kill(unit.position);}));
+    }
+
+    public void MoveUp(Unit unit) {
+        Position pos2 = new Position(unit.position.getX(), unit.position.getY() + 1);
+        board.Swap(unit.position, pos2);
+        Tick();
+    }
+
+    public void MoveDown(Unit unit) {
+        Position pos2 = new Position(unit.position.getX(), unit.position.getY() - 1);
+        board.Swap(unit.position, pos2);
+        Tick();
+    }
+
+    public void MoveLeft(Unit unit) {
+        Position pos2 = new Position(unit.position.getX() - 1, unit.position.getY());
+        board.Swap(unit.position, pos2);
+        Tick();
+    }
+
+    public void MoveRight(Unit unit) {
+        Position pos2 = new Position(unit.position.getX() + 1, unit.position.getY());
+        board.Swap(unit.position, pos2);
+        Tick();
+    }
 
     public void MoveUp() {
-        Position pos2 = new Position(player.position.getX(), player.position.getY() + 1);
-        board.Swap(player.position, pos2);
-        Tick();
+        MoveUp(player);
     }
 
     public void MoveDown() {
-        Position pos2 = new Position(player.position.getX(), player.position.getY() - 1);
-        board.Swap(player.position, pos2);
-        Tick();
+        MoveDown(player);
     }
 
     public void MoveLeft() {
-        Position pos2 = new Position(player.position.getX() - 1, player.position.getY());
-        board.Swap(player.position, pos2);
-        Tick();
+        MoveLeft(player);
     }
 
     public void MoveRight() {
-        Position pos2 = new Position(player.position.getX() + 1, player.position.getY());
-        board.Swap(player.position, pos2);
-        Tick();
+        MoveRight(player);
     }
 
     public void CastAbility() {
@@ -37,7 +60,9 @@ public class GameController {
         Tick();
     }
 
+    //Making the player ticks, then , each enemy performs a move.
     private void Tick() {
-        board.Tick();
+        player.Tick();
+        enemies.forEach(Tile::Tick);
     }
 }

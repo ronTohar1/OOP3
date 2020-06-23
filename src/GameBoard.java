@@ -37,4 +37,15 @@ public class GameBoard {
 
         return tilesSwapped;
     }
+
+    public void Kill(Position pos){
+        if(isValidPosition(pos))
+        board[pos.getX()][pos.getY()]= new Empty(pos);
+    }
+
+    private boolean isValidPosition(Position pos){
+        if(pos.getX()>=board.length||pos.getX()<0||pos.getY()>=board[pos.getX()].length || pos.getY()<0)
+            return false;
+        return true;
+    }
 }
