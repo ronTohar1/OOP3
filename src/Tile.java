@@ -1,6 +1,6 @@
 public abstract class Tile implements Visitor, Visited {
 
-    private final char character;
+    protected char character;
     protected Position position;
 
     public Tile(char charValue) {
@@ -46,6 +46,8 @@ public abstract class Tile implements Visitor, Visited {
         position = other.position;
         other.position = temp;
     }
+
+    protected Enemy CanFight(){return null;}
 
     protected abstract void Tick();
 }

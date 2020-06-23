@@ -1,18 +1,26 @@
+import java.util.Random;
+
 abstract public class Unit extends Tile {
 
+    private MessageHandler msgHandler;
     protected CombatSystem cb;
     private String name;
     protected Health unitHealth;
     protected int attackPoints;
     protected int defensePoints;
+    protected int experience;
+    protected KillerObserver killer;
 
+    protected abstract void Die();
 
-    public Unit(char charValue,String name,int attackPoints,int defensePoints) {
+    public Unit(KillerObserver killer, char charValue, String name, int attackPoints, int defensePoints) {
         super(charValue);
         cb=CombatSystem.getInstance();
         this.attackPoints=attackPoints;
         this.defensePoints=defensePoints;
         this.name=name;
+        this.killer=killer;
+        msgHandler=MessageHandler.GetInstance();
     }
 
     //Return true if dies.
@@ -20,9 +28,14 @@ abstract public class Unit extends Tile {
         unitHealth.amount -= amountToSubtract;
         if (unitHealth.amount  <= 0) {
             unitHealth.amount = 0;
+            Die();
             return true;
         }
         return false;
+    }
+
+    protected void HandleMessage(String msg){
+        msgHandler.HandleMessage(msg);
     }
 
 
@@ -33,13 +46,31 @@ abstract public class Unit extends Tile {
         return true;
     }
 
-    protected abstract void Die();
 
+    //Default fight option, using the basic attackPoints;
     protected boolean Fight(Unit toAttack){
-       if(toAttack.SubtractCurrentHealth(cb.Fight(this.attackPoints,toAttack.defensePoints)))
-       {
-           toAttack.Die();
-       }
+       return Fight(attackPoints,toAttack);
+
+    }
+    protected boolean Fight(int MaxDamage,Unit toAttack){
+        HandleMessage(name+" engaged in combat with "+toAttack.name);
+        int attackAmount=RollDice(attackPoints);
+        HandleMessage(name+" rolled "+attackAmount+" attack damage");
+        int defenceAmount=RollDice(toAttack.defensePoints);
+        HandleMessage(toAttack.name+" rolled "+defenceAmount+" defence points");
+        int damage=attackAmount-defenceAmount;
+        boolean died=false;
+        if(damage>0)
+            died=toAttack.SubtractCurrentHealth(damage);
+        return died;
+
+    }
+
+
+    protected int RollDice(int maxToRoll){
+        Random rnd= new Random();
+        return rnd.nextInt(maxToRoll+1);
+
     }
 }
 

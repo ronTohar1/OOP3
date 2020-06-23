@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class GameController implements IMover{
+public class GameController implements IMover,IKiller{
 
     private GameBoard board;
     private Player player;
@@ -9,9 +9,12 @@ public class GameController implements IMover{
     public GameController(){
         IEnemyMove enemyMove=((enemy)-> enemy.EnemyMove(player));
         ISurroundings surroundings=((pos, range) -> {return null;});
-        IKiller killer=((unit -> {board.Kill(unit.position);}));
     }
 
+    //Stops the game.
+    private void EndGame(){
+
+    }
     public void MoveUp(Unit unit) {
         Position pos2 = new Position(unit.position.getX(), unit.position.getY() + 1);
         board.Swap(unit.position, pos2);
@@ -65,4 +68,18 @@ public class GameController implements IMover{
         player.Tick();
         enemies.forEach(Tile::Tick);
     }
+
+    @Override
+    public void Kill(Player player) {
+        EndGame();
+    }
+
+    @Override
+    public void Kill(Enemy enemy) {
+        enemies.remove(enemy);
+        board.Kill(enemy.position);
+        if(enemies.isEmpty())
+            LevelUp();
+    }
+    private void LevelUp(){}
 }

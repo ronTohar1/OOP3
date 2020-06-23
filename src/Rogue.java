@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Rogue extends Player {
 
     FanOfKnives fanOfKnives;
@@ -25,33 +27,41 @@ public class Rogue extends Player {
 
     @Override
     public void CastAbility() {
+        if(fanOfKnives.currentEnergy<fanOfKnives.cost){}
+            HandleMessage("Not enough energy to use special ability");
+        else{
+            List<Enemy> enemies= GetSurroundings(fanOfKnives.attackRange);
+            //Fighting each enemy.
+            enemies.forEach(super::Fight);
+        }
 
     }
 }
 
 class FanOfKnives{
-    private int defaultCurrentEnergy=100;
-    int cost;
-    int currentEnergy;
-
+    private int maxEnergy=100;
+    protected int cost;
+    protected int currentEnergy;
+    protected int attackRange;
     public FanOfKnives(int cost){
         this.cost=cost;
-        currentEnergy=defaultCurrentEnergy;
+        currentEnergy=maxEnergy;
     }
 
     private void LevelUpCurrentEnergy(){
-        currentEnergy=defaultCurrentEnergy;
+        currentEnergy=maxEnergy;
     }
 
     protected void LevelUp(){
         LevelUpCurrentEnergy();
     }
 
-    private void OnTickCurrentEnergy(){
-        currentEnergy=Math.min(currentEnergy+10,100);
+    protected void AddToCurrentEnergy(int amount){
+        currentEnergy=Math.min(currentEnergy+10,maxEnergy);
     }
 
     protected void Tick(){
-        OnTickCurrentEnergy();
+        int AdditionalEnergy=10;
+       AddToCurrentEnergy(AdditionalEnergy);
     }
 }

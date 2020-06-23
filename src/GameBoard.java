@@ -11,7 +11,7 @@ public class GameBoard {
 
     public void Tick(){
         for(int i=0;i<board.length;i++){
-            for(int j=0;j<board[i].length){
+            for(int j=0;j<board[i].length;i++){
                 board[i][j].Tick();
             }
         }

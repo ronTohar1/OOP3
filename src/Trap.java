@@ -15,11 +15,15 @@ public class Trap extends Enemy{
     }
 
     @Override
-    protected void Tick() {
+    public void EnemyMove(Player player) {
         visible=tickCount<visibilityTime;
         if(tickCount==visibilityTime+invisibilityTime)
             tickCount=0;
         else
             tickCount++;
+        if(position.Range(player.position)<2)
+            Fight(player);
     }
+
+
 }

@@ -1,4 +1,6 @@
+import java.util.List;
+
 public interface ISurroundings {
 
-    public Tile[] GetSurroundings(Position pos,int range);
+    public List<Tile> GetSurroundings(Position pos, int range);
 }

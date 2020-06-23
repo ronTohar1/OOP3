@@ -1,7 +1,7 @@
 abstract class Enemy extends Unit {
 
-    private int experience;
     protected MoveObserver mover;
+    protected IEnemyMove enemyMover;
 
     public Enemy(char charValue,MoveObserver mover) {
         super(charValue);
@@ -16,7 +16,13 @@ abstract class Enemy extends Unit {
         return false;
     }
 
+    public void Die(){
+        killer.Kill(this);
+    }
 
+    public void Tick(){
+        enemyMover.MakeMove(this);
+    }
     @Override
     public boolean accept(Tile tile) {
        return tile.swap(this);

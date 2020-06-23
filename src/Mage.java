@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Mage extends Player {
 
     private Blizzard blizzard;
@@ -9,11 +12,6 @@ public class Mage extends Player {
 
     @Override
     protected void LevelUp() {
-        abilityLevelUp();
-    }
-
-    @Override
-    private void abilityLevelUp() {
         blizzard.LevelUp(this.level);
     }
 
@@ -24,17 +22,28 @@ public class Mage extends Player {
 
     @Override
     public void CastAbility() {
-
+        if(blizzard.currentMana<blizzard.manaCost){}
+            HandleMessage("Not enough mana to use the special ability");
+        else{
+            blizzard.SubtractCurrentMana(blizzard.manaCost);
+            int hits=0;
+            List<Enemy> enemies=GetSurroundings(blizzard.abilityRange);
+            while(hits<blizzard.histCount && !enemies.isEmpty()){
+                int randomEnemyPos=RollDice(enemies.size()-1);
+                super.Fight(blizzard.spellPower,enemies.get(randomEnemyPos));
+                hits++;
+            }
+        }
     }
 }
 
 class Blizzard  {
-    private int manaPool;
-    private int currentMana;
-    private int manaCost;
-    private int spellPower;
-    private int abilityRange;
-    private int histCount;
+    protected int manaPool;
+    protected int currentMana;
+    protected int manaCost;
+    protected int spellPower;
+    protected int abilityRange;
+    protected int histCount;
 
     public Blizzard(int manaPool,int manaCost,int abilityRange,int histCount,int spellPower) {
         this.manaPool=manaPool;
@@ -62,6 +71,7 @@ class Blizzard  {
     private void LevelUpCurrentMana(){
         currentMana=Math.min(currentMana+(manaPool/4),manaPool);
     }
+
     private void LevelUpSpellPower(int level){
         int additionalSpellPower=10*level;
         spellPower+=additionalSpellPower;
@@ -72,7 +82,15 @@ class Blizzard  {
         LevelUpSpellPower(level);
     }
 
-    public void AbilityCast() {
+    protected void AddToCurrentMana(int amount){
+        currentMana=Math.min(currentMana+amount,manaPool);
+
+    }
+
+    protected void SubtractCurrentMana(int amount){
+        currentMana=Math.max(currentMana-amount,0);
+    }
+    public boolean AbilityCast() {
 
     }
 }

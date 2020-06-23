@@ -23,6 +23,13 @@ public class Position
         this.y = y;
     }
 
+    public int getDx(Position other){
+        return x-other.getX();
+    }
+    public int getDy(Position other){
+        return y-other.getY();
+    }
+
     public double Range(Position other){
         return Math.sqrt(Math.pow(x-other.x,2)+Math.pow(y-other.y,2));
     }

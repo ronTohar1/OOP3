@@ -1,9 +1,11 @@
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 public abstract class Player extends Unit {
 
     private static final char charValue='@';
-    private int experience;
     protected int level;
-    private
     private ISurroundings surroundings;
 
     public Player(int experience) {
@@ -14,7 +16,9 @@ public abstract class Player extends Unit {
     public String toString() {
         return null;
     }
+
     protected abstract void LevelUp();
+    protected abstract void CastAbility();
 
     protected void UponLevelUp(){
         int minForLevelUp=50*level;
@@ -34,15 +38,33 @@ public abstract class Player extends Unit {
         LevelUp();
     }
 
-    protected void Die(){
 
+
+    protected List<Enemy> GetSurroundings(int range){
+        List<Tile> tiles = this.surroundings.GetSurroundings(position, range);
+        //Perform CanFight on each object in the surroundings list.
+        List<Enemy> unitsList = (tiles.stream().map(Tile::CanFight).filter(Objects::nonNull)).collect(Collectors.toList());
+        return unitsList;
+    }
+    private void AddExperience(int exp){
+        experience+=exp;
+        if(experience>=50*level)
+            UponLevelUp();
+    }
+    @Override
+    protected void Die(){
+        this.character='X';
+        killer.Kill(this);
+    }
+
+    protected void  Fight(int maxDamage,Enemy toAttack){
+        if(super.Fight(maxDamage,toAttack)){
+            AddExperience(toAttack.experience);
+        }
     }
 
 
     protected  void AddToHealthPool(int amountToAdd) {
-        if (amountToAdd < 1)
-            throw new IllegalArgumentException("Health Pool can only be increased");
-
         unitHealth.pool += amountToAdd;
     }
 
@@ -54,19 +76,18 @@ public abstract class Player extends Unit {
             unitHealth.amount = unitHealth.pool;
     }
 
-    protected  void AddToAttack(int toAdd) {
+    protected void AddToAttack(int toAdd) {
         attackPoints += toAdd;
     }
 
-    protected    void AddToDefense(int toAdd) {
+    protected void AddToDefense(int toAdd) {
         defensePoints += toAdd;
     }
 
 
     @Override
     public boolean swap(Enemy enemy) {
-        if(Fight(enemy));
-            this.experience+=
+        this.Fight(attackPoints,enemy);
         return false;
     }
 
@@ -75,6 +96,7 @@ public abstract class Player extends Unit {
         switchPositions(empty);
         return true;
     }
+
 
     @Override
     public boolean accept(Tile tile) {
