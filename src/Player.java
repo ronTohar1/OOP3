@@ -1,3 +1,5 @@
+import jdk.nashorn.internal.ir.WhileNode;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,25 +19,33 @@ public abstract class Player extends Unit {
         return null;
     }
 
-    protected abstract void LevelUp();
+    protected abstract String LevelUp();
     protected abstract void CastAbility();
 
     protected void UponLevelUp(){
         int minForLevelUp=50*level;
-        if(experience<minForLevelUp)
-            throw new IllegalArgumentException("You cant level up yet");
-        level++;
-        experience=experience-minForLevelUp;
-        int additionalHealth=10*level;
-        int additionalAttack=4*level;
-        int additionalDefense=level;
+        while(experience>=minForLevelUp) {
+            level++;
+            experience = experience - minForLevelUp;
+            int prevHealth=this.unitHealth.amount;
+            int prevAttack=this.attackPoints;
+            int prevDefence=this.defensePoints;
+            int additionalHealth = 10 * level;
+            int additionalAttack = 4 * level;
+            int additionalDefense = level;
+            AddToAttack(additionalAttack);
+            AddToDefense(additionalDefense);
+            AddToHealthPool(additionalHealth);
+            FillCurrentHealth();
+            String levelUpString=LevelUp();
+            minForLevelUp=50*level;
+            int healthDif=this.unitHealth.amount-prevHealth;
+            int AttackDif=this.attackPoints-prevAttack;
+            int DefenseDif=this.defensePoints-prevDefence;
+            String msg=this.name+" reached level "+this.level+": +"+healthDif+" health, +"+AttackDif+" attack points, +"+DefenseDif+" defense points \n"+levelUpString;
+            HandleMessage(msg);
+        }
 
-        AddToAttack(additionalAttack);
-        AddToDefense(additionalDefense);
-        AddToHealthPool(additionalHealth);
-        FillCurrentHealth();
-
-        LevelUp();
     }
 
 

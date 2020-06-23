@@ -11,8 +11,8 @@ public class Mage extends Player {
     }
 
     @Override
-    protected void LevelUp() {
-        blizzard.LevelUp(this.level);
+    protected String LevelUp() {
+       return blizzard.LevelUp(this.level);
     }
 
     @Override
@@ -22,9 +22,11 @@ public class Mage extends Player {
 
     @Override
     public void CastAbility() {
-        if(blizzard.currentMana<blizzard.manaCost){}
-            HandleMessage("Not enough mana to use the special ability");
+        if(blizzard.currentMana<blizzard.manaCost) {
+            HandleMessage(this.name + " tried to cast " + blizzard.name + " but the current mana: " + blizzard.currentMana + " is less than the mana cost: " + blizzard.manaCost);
+        }
         else{
+            HandleMessage(this.name+" used "+ blizzard.name);
             blizzard.SubtractCurrentMana(blizzard.manaCost);
             int hits=0;
             List<Enemy> enemies=GetSurroundings(blizzard.abilityRange);
@@ -38,6 +40,7 @@ public class Mage extends Player {
 }
 
 class Blizzard  {
+    protected String name="Blizzard";
     protected int manaPool;
     protected int currentMana;
     protected int manaCost;
@@ -64,22 +67,26 @@ class Blizzard  {
     }
 
 
-    private void LevelUpManaPool(int level){
+    private int LevelUpManaPool(int level){
         int additionalManaPool=25*level;
         manaPool+=additionalManaPool;
+        return additionalManaPool;
     }
     private void LevelUpCurrentMana(){
         currentMana=Math.min(currentMana+(manaPool/4),manaPool);
     }
 
-    private void LevelUpSpellPower(int level){
+    private int LevelUpSpellPower(int level){
         int additionalSpellPower=10*level;
         spellPower+=additionalSpellPower;
+        return additionalSpellPower;
     }
-    protected void LevelUp(int level){
-        LevelUpManaPool(level);
+    protected String LevelUp(int level){
+        int Manadif=LevelUpManaPool(level);
         LevelUpCurrentMana();
-        LevelUpSpellPower(level);
+        int spellpowerDif=LevelUpSpellPower(level);
+        String msg="+"+Manadif+" to mana pool , +"+spellpowerDif+" spell power";
+        return msg;
     }
 
     protected void AddToCurrentMana(int amount){

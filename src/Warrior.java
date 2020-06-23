@@ -14,19 +14,19 @@ public class Warrior extends Player {
     }
 
     @Override
-    protected void LevelUp() {
+    protected String LevelUp() {
         int additionalHealth = 5 * level;
         int additionalAttack = 2 * level;
         int additionalDefense = level;
         AddToHealthPool(additionalHealth);
         AddToAttack(additionalAttack);
         AddToDefense(additionalDefense);
-        abilityLevelUp();
+        return abilityLevelUp();
     }
 
     @Override
-    private void abilityLevelUp() {
-        avengersShield.LevelUp();
+    private String abilityLevelUp() {
+        return avengersShield.LevelUp();
     }
 
     @Override
@@ -36,18 +36,27 @@ public class Warrior extends Player {
 
     @Override
     public void CastAbility() {
-        if (avengersShield.remainingCooldown > 0){}
-            HandleMessage("The special ability is still on cooldown");
-        List<Enemy> surroundings=GetSurroundings(avengersShield.attackRange);
-        avengersShield.ResetCooldown();//Resets the special ability cooldown
-        if (!surroundings.isEmpty()) {
-            int rand = RollDice(enemiesList.size() - 1);
-            int damage = (int) (0.1 * unitHealth.pool);
-            surroundings.get(rand).SubtractCurrentHealth(damage);
+        if (avengersShield.remainingCooldown > 0) {
+            HandleMessage(this.name + " tried to cast " + avengersShield.name + " but the remaining cooldown is " + avengersShield.remainingCooldown);
         }
-        avengersShield.remainingCooldown = avengersShield.abilityCooldown;
-        int AdditionalCurrHealth=10 * defensePoints;
-        AddToCurrentHealth(10 * defensePoints);
+        else{
+            HandleMessage(this.name+" used "+avengersShield.name);
+            //Healing
+            int AdditionalCurrHealth = 10 * defensePoints;
+            AddToCurrentHealth(AdditionalCurrHealth);
+            HandleMessage(this.name +" healed for "+ AdditionalCurrHealth);
+            //Fighting
+            List<Enemy> enemyList = GetSurroundings(avengersShield.attackRange);
+            avengersShield.ResetCooldown();//Resets the special ability cooldown
+            if (!enemyList.isEmpty()) {
+                int rand = RollDice(enemyList.size() - 1);
+                // TODO: 23/06/2020 check if nede to cast to int.
+                int damage = (int) (0.1 * unitHealth.pool);
+                enemyList.get(rand).SubtractCurrentHealth(damage);
+            }
+            avengersShield.remainingCooldown = avengersShield.abilityCooldown;
+
+        }
     }
 
 }
@@ -55,6 +64,7 @@ public class Warrior extends Player {
 
 class AvengersShield {
 
+    protected String name="Avengers Shield";
     int abilityCooldown;
     int remainingCooldown;
     final int attackRange = 3;
@@ -78,8 +88,9 @@ class AvengersShield {
             remainingCooldown -= 1;
     }
 
-    protected void LevelUp() {
+    protected String LevelUp() {
         ResetCooldown();
+        return "";
     }
 
     public AvengersShield() {

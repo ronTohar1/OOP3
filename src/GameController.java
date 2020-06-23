@@ -5,15 +5,17 @@ public class GameController implements IMover,IKiller{
     private GameBoard board;
     private Player player;
     List<Enemy> enemies;
+    MessageHandler msgHandler= MessageHandler.GetInstance();
 
     public GameController(){
         IEnemyMove enemyMove=((enemy)-> enemy.EnemyMove(player));
         ISurroundings surroundings=((pos, range) -> {return null;});
+
     }
 
     //Stops the game.
     private void EndGame(){
-
+        msgHandler.HandleMessage("");
     }
     public void MoveUp(Unit unit) {
         Position pos2 = new Position(unit.position.getX(), unit.position.getY() + 1);

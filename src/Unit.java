@@ -2,9 +2,9 @@ import java.util.Random;
 
 abstract public class Unit extends Tile {
 
-    private MessageHandler msgHandler;
+    private MessageHandler msgHandler=MessageHandler.GetInstance();
     protected CombatSystem cb;
-    private String name;
+    protected String name;
     protected Health unitHealth;
     protected int attackPoints;
     protected int defensePoints;
@@ -20,7 +20,6 @@ abstract public class Unit extends Tile {
         this.defensePoints=defensePoints;
         this.name=name;
         this.killer=killer;
-        msgHandler=MessageHandler.GetInstance();
     }
 
     //Return true if dies.
@@ -60,8 +59,10 @@ abstract public class Unit extends Tile {
         HandleMessage(toAttack.name+" rolled "+defenceAmount+" defence points");
         int damage=attackAmount-defenceAmount;
         boolean died=false;
-        if(damage>0)
+        if(damage>0){
             died=toAttack.SubtractCurrentHealth(damage);
+            HandleMessage(name+" has dealt "+damage+" damage to "+toAttack.name);
+        }
         return died;
 
     }

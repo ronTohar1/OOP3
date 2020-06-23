@@ -9,10 +9,10 @@ public class Rogue extends Player {
     }
 
     @Override
-    protected void LevelUp() {
+    protected String LevelUp() {
         int additionalAttack=3*level;
         AddToAttack(additionalAttack);
-        abilityLevelUp();
+        return abilityLevelUp();
     }
 
     @Override
@@ -27,8 +27,9 @@ public class Rogue extends Player {
 
     @Override
     public void CastAbility() {
-        if(fanOfKnives.currentEnergy<fanOfKnives.cost){}
+        if(fanOfKnives.currentEnergy<fanOfKnives.cost) {
             HandleMessage("Not enough energy to use special ability");
+        }
         else{
             List<Enemy> enemies= GetSurroundings(fanOfKnives.attackRange);
             //Fighting each enemy.
@@ -52,8 +53,9 @@ class FanOfKnives{
         currentEnergy=maxEnergy;
     }
 
-    protected void LevelUp(){
+    protected String LevelUp(){
         LevelUpCurrentEnergy();
+        return "";
     }
 
     protected void AddToCurrentEnergy(int amount){
