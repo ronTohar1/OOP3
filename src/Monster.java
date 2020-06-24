@@ -1,18 +1,9 @@
 public class Monster extends Enemy {
 
-    private int visionRange;
 
-    public Monster(char charValue,int visionRange) {
-        super(charValue);
-        this.visionRange=visionRange;
+    public Monster(char charValue,int health,int attack,int defense,String name,int visionRange,int experience) {
+        super(charValue,visionRange);
     }
-
-    @Override
-    protected Enemy CanFight() {
-        return this;
-    }
-
-
     @Override
     public void EnemyMove(Player player) {
         int dx=position.getDx(player.position);

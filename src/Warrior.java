@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 public class Warrior extends Player {
     private AvengersShield avengersShield;
 
-    public Warrior(int abilityCooldown) {
-        super();
+    public Warrior(int health,int attack,int defense,String name,int abilityCooldown) {
+        super(health,attack,defense,name);
         avengersShield = new AvengersShield(abilityCooldown);
     }
 
@@ -50,9 +50,10 @@ public class Warrior extends Player {
             avengersShield.ResetCooldown();//Resets the special ability cooldown
             if (!enemyList.isEmpty()) {
                 int rand = RollDice(enemyList.size() - 1);
-                // TODO: 23/06/2020 check if nede to cast to int.
+                // TODO: 23/06/2020 check if need to cast to int.
                 int damage = (int) (0.1 * unitHealth.pool);
-                enemyList.get(rand).SubtractCurrentHealth(damage);
+                Unit randEnemy= enemyList.get(rand);
+                super.Fight(damage,randEnemy);
             }
             avengersShield.remainingCooldown = avengersShield.abilityCooldown;
 
@@ -71,7 +72,6 @@ class AvengersShield {
 
     public AvengersShield(int abilityCooldown) {
         this.abilityCooldown = abilityCooldown;
-
     }
 
     private void SetAbilityCooldown(int abilityCooldown) {

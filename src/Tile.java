@@ -47,7 +47,6 @@ public abstract class Tile implements Visitor, Visited {
         other.position = temp;
     }
 
-    protected Enemy CanFight(){return null;}
 
     protected abstract void Tick();
 }

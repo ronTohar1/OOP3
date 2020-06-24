@@ -1,11 +1,10 @@
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Mage extends Player {
 
     private Blizzard blizzard;
-    public Mage(int manaPool,int manaCost,int abilityRange,int histCount,int spellPower) {
-        super();
+    public Mage(int health,int attack,int defense,String name,int manaPool,int manaCost,int spellPower,int histCount,int abilityRange) {
+        super(health,attack,defense,name);
         blizzard = new Blizzard(manaPool,manaCost,abilityRange,histCount,spellPower);
 
     }
@@ -23,7 +22,7 @@ public class Mage extends Player {
     @Override
     public void CastAbility() {
         if(blizzard.currentMana<blizzard.manaCost) {
-            HandleMessage(this.name + " tried to cast " + blizzard.name + " but the current mana: " + blizzard.currentMana + " is less than the mana cost: " + blizzard.manaCost);
+            HandleMessage(this.name + " tried to cast " + blizzard.name + " but the current mana (" + blizzard.currentMana + ") is less than the mana cost (" + blizzard.manaCost+")");
         }
         else{
             HandleMessage(this.name+" used "+ blizzard.name);

@@ -10,8 +10,12 @@ public abstract class Player extends Unit {
     protected int level;
     private ISurroundings surroundings;
 
-    public Player(int experience) {
+    public Player(int health,int attack,int defense,String name) {
         super('@');
+    }
+
+    public void SetSurroundings(ISurroundings surroundings){
+        this.surroundings=surroundings;
     }
 
     @Override
@@ -51,10 +55,7 @@ public abstract class Player extends Unit {
 
 
     protected List<Enemy> GetSurroundings(int range){
-        List<Tile> tiles = this.surroundings.GetSurroundings(position, range);
-        //Perform CanFight on each object in the surroundings list.
-        List<Enemy> unitsList = (tiles.stream().map(Tile::CanFight).filter(Objects::nonNull)).collect(Collectors.toList());
-        return unitsList;
+        List<Enemy> tiles = this.surroundings.GetSurroundings(range);
     }
     private void AddExperience(int exp){
         experience+=exp;
@@ -97,7 +98,7 @@ public abstract class Player extends Unit {
 
     @Override
     public boolean swap(Enemy enemy) {
-        this.Fight(attackPoints,enemy);
+        this.Fight(enemy);
         return false;
     }
 

@@ -2,12 +2,15 @@ abstract class Enemy extends Unit {
 
     protected MoveObserver mover;
     protected IEnemyMove enemyMover;
+    private int visionRange;
 
-    public Enemy(char charValue,MoveObserver mover) {
+    public Enemy(char charValue,int visionRange) {
         super(charValue);
-        this.mover=mover;
     }
 
+    public void SetMover(MoveObserver mover){
+        this.mover=mover;
+    }
     public abstract void EnemyMove(Player player);
 
     @Override

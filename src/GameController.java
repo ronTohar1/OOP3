@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameController implements IMover,IKiller{
 
@@ -9,7 +10,7 @@ public class GameController implements IMover,IKiller{
 
     public GameController(){
         IEnemyMove enemyMove=((enemy)-> enemy.EnemyMove(player));
-        ISurroundings surroundings=((pos, range) -> {return null;});
+        ISurroundings PlayerSurroundings=((range) -> {return enemies.stream().filter(e->e.position.Range(player.position)<range).collect(Collectors.toList());});
 
     }
 

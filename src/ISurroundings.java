@@ -2,5 +2,6 @@ import java.util.List;
 
 public interface ISurroundings {
 
-    public List<Tile> GetSurroundings(Position pos, int range);
+    //Should return the surroundings of the player
+    public List<Enemy> GetSurroundings(int range);
 }

@@ -48,16 +48,18 @@ abstract public class Unit extends Tile {
 
     //Default fight option, using the basic attackPoints;
     protected boolean Fight(Unit toAttack){
-       return Fight(attackPoints,toAttack);
-
-    }
-    protected boolean Fight(int MaxDamage,Unit toAttack){
         HandleMessage(name+" engaged in combat with "+toAttack.name);
         int attackAmount=RollDice(attackPoints);
-        HandleMessage(name+" rolled "+attackAmount+" attack damage");
+        HandleMessage(name+" rolled "+DamageToDeal+" attack damage");
+        return Fight(attackAmount,toAttack);
+
+    }
+    //Tries to deal that damage exactly.
+    protected boolean Fight(int DamageToDeal,Unit toAttack){
+
         int defenceAmount=RollDice(toAttack.defensePoints);
         HandleMessage(toAttack.name+" rolled "+defenceAmount+" defence points");
-        int damage=attackAmount-defenceAmount;
+        int damage=DamageToDeal-defenceAmount;
         boolean died=false;
         if(damage>0){
             died=toAttack.SubtractCurrentHealth(damage);

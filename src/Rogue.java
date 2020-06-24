@@ -3,8 +3,8 @@ import java.util.List;
 public class Rogue extends Player {
 
     FanOfKnives fanOfKnives;
-    public Rogue(int cost){
-        super();
+    public Rogue(int health,int attack,int defense,String name,int cost){
+        super(health,attack,defense,name);
         fanOfKnives=new FanOfKnives(cost);
     }
 
@@ -33,14 +33,14 @@ public class Rogue extends Player {
         else{
             List<Enemy> enemies= GetSurroundings(fanOfKnives.attackRange);
             //Fighting each enemy.
-            enemies.forEach(super::Fight);
+            enemies.forEach(p-> Fight(attackPoints,p));
         }
 
     }
 }
 
 class FanOfKnives{
-    private int maxEnergy=100;
+    private final int maxEnergy=100;
     protected int cost;
     protected int currentEnergy;
     protected int attackRange;

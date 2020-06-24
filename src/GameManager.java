@@ -3,7 +3,11 @@ import sun.misc.GC;
 public class GameManager {
 
     private GameController gameController;
-
+    private  Player[] players;
+    private Enemy[] enemies;
+    public GameManager(){
+        Player
+    }
     public void MoveUp() {
         gameController.MoveUp();
     }
