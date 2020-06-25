@@ -1,11 +1,18 @@
-public abstract class Tile implements Visitor, Visited {
+public abstract class Tile implements Visited {
 
     protected char character;
     protected Position position;
 
     public Tile(char charValue) {
         character = charValue;
+    }
 
+    public Position getPosition(){
+        return position;
+    }
+
+    public void SetPosition(int x, int y){
+        position=new Position(x,y);
     }
 
     //distance between two tiles.
@@ -13,32 +20,11 @@ public abstract class Tile implements Visitor, Visited {
         return position.Range(other.position);
     }
 
-    public boolean swapTwoTiles(Tile tile) {
-        return tile.accept(this);
-    }
 
-    @Override
-    public boolean swap(Wall wall) {
-        return false;
-    }
 
-    @Override
-    public boolean swap(Player player) {
-        return false;
-    }
-
-    @Override
-    public boolean swap(Enemy enemy) {
-        return false;
-    }
-
-    @Override
-    public boolean swap(Empty empty) {
-        return false;
-    }
 
     public String toString() {
-        return null;
+        return character+"";
     }
 
     protected void switchPositions(Tile other) {
@@ -46,7 +32,6 @@ public abstract class Tile implements Visitor, Visited {
         position = other.position;
         other.position = temp;
     }
-
 
     protected abstract void Tick();
 }

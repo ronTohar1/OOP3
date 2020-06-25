@@ -9,15 +9,15 @@ public class Rogue extends Player {
     }
 
     @Override
-    protected String LevelUp() {
-        int additionalAttack=3*level;
-        AddToAttack(additionalAttack);
-        return abilityLevelUp();
+    protected String DescribeSub() {
+        return fanOfKnives.DescribeAbility();
     }
 
     @Override
-    private void abilityLevelUp() {
-        fanOfKnives.LevelUp();
+    protected String LevelUp() {
+        int additionalAttack=3*level;
+        AddToAttack(additionalAttack);
+        return fanOfKnives.LevelUp();
     }
 
     @Override
@@ -44,6 +44,7 @@ class FanOfKnives{
     protected int cost;
     protected int currentEnergy;
     protected int attackRange;
+
     public FanOfKnives(int cost){
         this.cost=cost;
         currentEnergy=maxEnergy;
@@ -65,5 +66,9 @@ class FanOfKnives{
     protected void Tick(){
         int AdditionalEnergy=10;
        AddToCurrentEnergy(AdditionalEnergy);
+    }
+
+    public String DescribeAbility(){
+        return "Current Energy: "+currentEnergy+"/"+maxEnergy+", Ability Range: "+attackRange;
     }
 }

@@ -4,11 +4,11 @@ public class Trap extends Enemy{
     private int visibilityTime;
     private int invisibilityTime;
     private int tickCount;
-    private final int visionRange=2;
     private boolean visible;
+    private static int vRange=2;
 
-    public Trap(char charValue,int health,int attack,int defense,String name,int visionRange,int experience,int visibilityTime,int invisibilityTime) {
-        super(charValue,visionRange);
+    public Trap(char charValue,int health,int attack,int defense,String name,int experience,int visibilityTime,int invisibilityTime) {
+        super(health,attack,defense,name,charValue,vRange,experience);
         tickCount=0;
         visible=true;
         this.visibilityTime=visibilityTime;
@@ -24,6 +24,14 @@ public class Trap extends Enemy{
             tickCount++;
         if(position.Range(player.position)<visionRange)
             Fight(player);
+    }
+
+    @Override
+    public String toString() {
+        if(!visible)
+            return Empty.charValue +"";
+        else
+            return character+"";
     }
 
 

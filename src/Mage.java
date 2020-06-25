@@ -10,6 +10,11 @@ public class Mage extends Player {
     }
 
     @Override
+    protected String DescribeSub() {
+        return blizzard.DescribeAbility();
+    }
+
+    @Override
     protected String LevelUp() {
        return blizzard.LevelUp(this.level);
     }
@@ -21,17 +26,20 @@ public class Mage extends Player {
 
     @Override
     public void CastAbility() {
+        String myName=GetName();
         if(blizzard.currentMana<blizzard.manaCost) {
-            HandleMessage(this.name + " tried to cast " + blizzard.name + " but the current mana (" + blizzard.currentMana + ") is less than the mana cost (" + blizzard.manaCost+")");
+            HandleMessage(myName + " tried to cast " + blizzard.name + " but the current mana (" + blizzard.currentMana + ") is less than the mana cost (" + blizzard.manaCost+")");
         }
         else{
-            HandleMessage(this.name+" used "+ blizzard.name);
+            HandleMessage(myName+" used "+ blizzard.name);
             blizzard.SubtractCurrentMana(blizzard.manaCost);
             int hits=0;
             List<Enemy> enemies=GetSurroundings(blizzard.abilityRange);
             while(hits<blizzard.histCount && !enemies.isEmpty()){
                 int randomEnemyPos=RollDice(enemies.size()-1);
-                super.Fight(blizzard.spellPower,enemies.get(randomEnemyPos));
+                Enemy e=enemies.get(randomEnemyPos);
+                HandleMessage("Blizzard hit "+e.GetName());
+                super.Fight(blizzard.spellPower,e);
                 hits++;
             }
         }
@@ -96,7 +104,8 @@ class Blizzard  {
     protected void SubtractCurrentMana(int amount){
         currentMana=Math.max(currentMana-amount,0);
     }
-    public boolean AbilityCast() {
 
+    protected String DescribeAbility(){
+        return "Mana: "+currentMana+"/"+manaPool+", Spell Power: "+spellPower+", Hits Count: "+histCount+" Ability Range: "+abilityRange;
     }
 }

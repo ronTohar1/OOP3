@@ -1,4 +1,4 @@
 public interface  Visited {
 
-     boolean accept(Tile tile);
+     boolean accept(Visitor visitor);
 }

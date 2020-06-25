@@ -1,13 +1,21 @@
 abstract class Enemy extends Unit {
 
-    protected MoveObserver mover;
-    protected IEnemyMove enemyMover;
-    private int visionRange;
+    protected MoveObserver mover;//Moving the enemy up ,down,left or right.
+    protected IEnemyMove enemyMove;//Lambda expression->Performing an enemyMove and gives the player as an argument.
+    protected int visionRange;
+    private int xpValue;
 
-    public Enemy(char charValue,int visionRange) {
-        super(charValue);
+    public Enemy(int health,int attack,int defense,String name,char charValue,int visionRange,int experienceValue) {
+        super(health,attack,defense,name,charValue);
+        this.visionRange=visionRange;
+        this.xpValue=experienceValue;
+
     }
 
+    public int GetXpValue(){
+        return this.xpValue;
+    }
+    public void SetEnemyMove(IEnemyMove enemyMove){this.enemyMove =enemyMove;}
     public void SetMover(MoveObserver mover){
         this.mover=mover;
     }
@@ -24,10 +32,17 @@ abstract class Enemy extends Unit {
     }
 
     public void Tick(){
-        enemyMover.MakeMove(this);
+        enemyMove.MakeMove(this);
     }
     @Override
-    public boolean accept(Tile tile) {
-       return tile.swap(this);
+    public boolean accept(Visitor visitor) {
+       return visitor.swap(this);
     }
+
+    @Override
+    public String DescribeMe() {
+        return "Vision Range: "+visionRange;
+    }
+
+
 }

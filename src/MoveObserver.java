@@ -5,14 +5,16 @@ public class MoveObserver {
         mover.MoveUp(unit);
     }
     public void MoveDown(Unit unit){
-        mover.MoveUp(unit);
+        mover.MoveDown(unit);
     }
     public void MoveLeft(Unit unit){
-        mover.MoveUp(unit);
+        mover.MoveLeft(unit);
     }
     public void MoveRight(Unit unit){
-        mover.MoveUp(unit);
+        mover.MoveRight(unit);
     }
-
+    public MoveObserver(IMover mover){
+        this.mover=mover;
+    }
 
 }

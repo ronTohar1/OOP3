@@ -14,6 +14,11 @@ public class Warrior extends Player {
     }
 
     @Override
+    protected String DescribeSub() {
+        return avengersShield.DescribeAbility();
+    }
+
+    @Override
     protected String LevelUp() {
         int additionalHealth = 5 * level;
         int additionalAttack = 2 * level;
@@ -24,7 +29,7 @@ public class Warrior extends Player {
         return abilityLevelUp();
     }
 
-    @Override
+
     private String abilityLevelUp() {
         return avengersShield.LevelUp();
     }
@@ -36,15 +41,17 @@ public class Warrior extends Player {
 
     @Override
     public void CastAbility() {
+        String myName=GetName();
+
         if (avengersShield.remainingCooldown > 0) {
-            HandleMessage(this.name + " tried to cast " + avengersShield.name + " but the remaining cooldown is " + avengersShield.remainingCooldown);
+            HandleMessage(myName + " tried to cast " + avengersShield.name + " but the remaining cooldown is " + avengersShield.remainingCooldown);
         }
         else{
-            HandleMessage(this.name+" used "+avengersShield.name);
+            HandleMessage(myName+" used "+avengersShield.name);
             //Healing
             int AdditionalCurrHealth = 10 * defensePoints;
             AddToCurrentHealth(AdditionalCurrHealth);
-            HandleMessage(this.name +" healed for "+ AdditionalCurrHealth);
+            HandleMessage(myName +" healed for "+ AdditionalCurrHealth);
             //Fighting
             List<Enemy> enemyList = GetSurroundings(avengersShield.attackRange);
             avengersShield.ResetCooldown();//Resets the special ability cooldown
@@ -99,5 +106,9 @@ class AvengersShield {
     public void OnTick() {
         if (remainingCooldown > 0)
             remainingCooldown -= 1;
+    }
+
+    protected String DescribeAbility(){
+        return "Cooldown: "+remainingCooldown+"/"+abilityCooldown+", Ability Range: "+attackRange;
     }
 }

@@ -1,26 +1,30 @@
 import jdk.nashorn.internal.ir.WhileNode;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+
 
 public abstract class Player extends Unit {
 
-    private static final char charValue='@';
+    public static final char charValue='@';
     protected int level;
     private ISurroundings surroundings;
+    private int experience;
 
     public Player(int health,int attack,int defense,String name) {
-        super('@');
+        super(health,attack,defense,name,charValue);
+        this.level=0;
+        this.experience=0;
+    }
+
+    protected abstract String DescribeSub();
+    @Override
+    public String DescribeMe() {
+        String msg="Level: "+level+", Expereience: "+experience+", "+DescribeSub();
+        return msg;
     }
 
     public void SetSurroundings(ISurroundings surroundings){
         this.surroundings=surroundings;
-    }
-
-    @Override
-    public String toString() {
-        return null;
     }
 
     protected abstract String LevelUp();
@@ -41,22 +45,21 @@ public abstract class Player extends Unit {
             AddToDefense(additionalDefense);
             AddToHealthPool(additionalHealth);
             FillCurrentHealth();
-            String levelUpString=LevelUp();
+            String levelUpString=LevelUp();//Getting a level up string from the sub classes, and executing the sub classes level up methods.
             minForLevelUp=50*level;
             int healthDif=this.unitHealth.amount-prevHealth;
             int AttackDif=this.attackPoints-prevAttack;
             int DefenseDif=this.defensePoints-prevDefence;
-            String msg=this.name+" reached level "+this.level+": +"+healthDif+" health, +"+AttackDif+" attack points, +"+DefenseDif+" defense points \n"+levelUpString;
+            String msg=GetName()+" reached level "+this.level+": +"+healthDif+" health, +"+AttackDif+" attack points, +"+DefenseDif+" defense points \n"+levelUpString;
             HandleMessage(msg);
         }
-
     }
-
-
 
     protected List<Enemy> GetSurroundings(int range){
         List<Enemy> tiles = this.surroundings.GetSurroundings(range);
+        return tiles;
     }
+
     private void AddExperience(int exp){
         experience+=exp;
         if(experience>=50*level)
@@ -68,9 +71,21 @@ public abstract class Player extends Unit {
         killer.Kill(this);
     }
 
+    @Override
+    public boolean swap(Enemy enemy) {
+
+        if(this.Fight(enemy)){
+            HandleMessage(GetName()+" has gained "+enemy.GetXpValue()+" by killing "+enemy.GetName()+"\n");
+
+            AddExperience(enemy.GetXpValue());
+        }
+        return false;
+    }
+
     protected void  Fight(int maxDamage,Enemy toAttack){
         if(super.Fight(maxDamage,toAttack)){
-            AddExperience(toAttack.experience);
+            HandleMessage(GetName()+" has gained "+toAttack.GetXpValue()+" by killing "+toAttack.GetName()+"\n");
+            AddExperience(toAttack.GetXpValue());
         }
     }
 
@@ -96,21 +111,11 @@ public abstract class Player extends Unit {
     }
 
 
-    @Override
-    public boolean swap(Enemy enemy) {
-        this.Fight(enemy);
-        return false;
-    }
 
-    @Override
-    public boolean swap(Empty empty) {
-        switchPositions(empty);
-        return true;
-    }
 
 
     @Override
-    public boolean accept(Tile tile) {
-        return tile.swap(this);
+    public boolean accept(Visitor visitor) {
+        return visitor.swap(this);
     }
 }

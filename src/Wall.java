@@ -1,7 +1,7 @@
 public class Wall extends Tile  {
 
-
-    public Wall(char charValue) {
+    public static final char charValue='#';
+    public Wall() {
         super(charValue);
     }
 
@@ -10,9 +10,8 @@ public class Wall extends Tile  {
 
     }
 
-
     @Override
-    public boolean accept(Tile tile) {
-        return tile.swap(this);
+    public boolean accept(Visitor visitor) {
+        return visitor.swap(this);
     }
 }
