@@ -31,9 +31,11 @@ public class Rogue extends Player {
             HandleMessage("Not enough energy to use special ability");
         }
         else{
+            HandleMessage(GetName()+" used Fan Of Knives");
             List<Enemy> enemies= GetSurroundings(fanOfKnives.attackRange);
+            fanOfKnives.currentEnergy-=fanOfKnives.cost;//Using the ability, therfore reducing one cost.
             //Fighting each enemy.
-            enemies.forEach(p-> Fight(attackPoints,p));
+            enemies.forEach(p->{HandleMessage("Fan Of Knives hit "+p.GetName());super.Fight(attackPoints,p);});
         }
 
     }
@@ -43,7 +45,7 @@ class FanOfKnives{
     private final int maxEnergy=100;
     protected int cost;
     protected int currentEnergy;
-    protected int attackRange;
+    protected int attackRange=2;
 
     public FanOfKnives(int cost){
         this.cost=cost;
@@ -56,7 +58,7 @@ class FanOfKnives{
 
     protected String LevelUp(){
         LevelUpCurrentEnergy();
-        return "";
+        return "Current energy: 100";
     }
 
     protected void AddToCurrentEnergy(int amount){

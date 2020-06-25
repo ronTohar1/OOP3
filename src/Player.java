@@ -9,6 +9,7 @@ public abstract class Player extends Unit {
     protected int level;
     private ISurroundings surroundings;
     private int experience;
+    private final int levelUpMultiplier=50;
 
     public Player(int health,int attack,int defense,String name) {
         super(health,attack,defense,name,charValue);
@@ -17,6 +18,7 @@ public abstract class Player extends Unit {
     }
 
     protected abstract String DescribeSub();
+    
     @Override
     public String DescribeMe() {
         String msg="Level: "+level+", Expereience: "+experience+", "+DescribeSub();
@@ -31,7 +33,7 @@ public abstract class Player extends Unit {
     protected abstract void CastAbility();
 
     protected void UponLevelUp(){
-        int minForLevelUp=50*level;
+        int minForLevelUp=levelUpMultiplier*level;
         while(experience>=minForLevelUp) {
             level++;
             experience = experience - minForLevelUp;
@@ -62,7 +64,7 @@ public abstract class Player extends Unit {
 
     private void AddExperience(int exp){
         experience+=exp;
-        if(experience>=50*level)
+        if(experience>=levelUpMultiplier*level)
             UponLevelUp();
     }
     @Override
@@ -75,7 +77,7 @@ public abstract class Player extends Unit {
     public boolean swap(Enemy enemy) {
 
         if(this.Fight(enemy)){
-            HandleMessage(GetName()+" has gained "+enemy.GetXpValue()+" by killing "+enemy.GetName()+"\n");
+            HandleMessage(GetName()+" has gained "+enemy.GetXpValue()+" XP by killing "+enemy.GetName()+"\n");
 
             AddExperience(enemy.GetXpValue());
         }
@@ -84,7 +86,7 @@ public abstract class Player extends Unit {
 
     protected void  Fight(int maxDamage,Enemy toAttack){
         if(super.Fight(maxDamage,toAttack)){
-            HandleMessage(GetName()+" has gained "+toAttack.GetXpValue()+" by killing "+toAttack.GetName()+"\n");
+            HandleMessage(GetName()+" has gained "+toAttack.GetXpValue()+" XP by killing "+toAttack.GetName()+"\n");
             AddExperience(toAttack.GetXpValue());
         }
     }

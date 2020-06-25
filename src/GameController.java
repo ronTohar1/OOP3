@@ -19,7 +19,7 @@ public class GameController implements IMover,IKiller{
 
 
     public GameController(Player player, Map<Character, Supplier<Enemy>> enemies, List<List<String>> levels){
-        //Setting lambda expression to player for its surroundings.
+        //Setting lambda expression to player for its surroundings (this lambda filters enemies in a given range).
         ISurroundings PlayerSurroundings=((range) -> {return levelEnemies.stream().filter(e->e.getPosition().Range(player.getPosition())<range).collect(Collectors.toList());});
         player.SetSurroundings(PlayerSurroundings);
         //Setting fields.
@@ -41,7 +41,7 @@ public class GameController implements IMover,IKiller{
         }
         return returnLevels;
     }
-    //Stops the game.
+    //Stops the game, player lost.
     private void LoseGame(){
         msgHandler.HandleMessage("Game Over");
         EndGame();
@@ -151,6 +151,8 @@ public class GameController implements IMover,IKiller{
             //Setting the labmda expression of the current enemies.
             IEnemyMove enemyMove=((enemy)-> enemy.EnemyMove(player));
             levelEnemies.stream().forEach(p->p.SetEnemyMove(enemyMove));
+
+            msgHandler.HandleMessage("You have reached a new map! (map level: "+currLevelNum+")");
 
         }
     }
